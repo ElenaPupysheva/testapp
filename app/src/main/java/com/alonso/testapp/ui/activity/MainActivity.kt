@@ -1,4 +1,4 @@
-package com.alonso.testapp
+package com.alonso.testapp.ui.activity
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
