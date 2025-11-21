@@ -6,9 +6,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.alonso.testapp.domain.models.BottomNavRoutes
+import com.alonso.testapp.presentation.TrainingViewModel
 import com.alonso.testapp.ui.compose.TrainingScreen
+
 private const val DELAY = 500
-fun NavGraphBuilder.trainingScreenNavigation(navController: NavHostController)  {
+fun NavGraphBuilder.trainingScreenNavigation(
+    navController: NavHostController,
+    viewModel: TrainingViewModel
+) {
     composable(
         route = BottomNavRoutes.Trainings.name,
         enterTransition = {
@@ -24,6 +29,9 @@ fun NavGraphBuilder.trainingScreenNavigation(navController: NavHostController)  
             )
         }
     ) {
-        TrainingScreen(navController = navController)
+        TrainingScreen(
+            navController = navController,
+            viewModel = viewModel
+        )
     }
 }

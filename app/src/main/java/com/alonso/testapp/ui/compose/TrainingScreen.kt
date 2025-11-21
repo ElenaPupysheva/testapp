@@ -1,9 +1,22 @@
 package com.alonso.testapp.ui.compose
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -15,12 +28,12 @@ import androidx.navigation.NavHostController
 import com.alonso.testapp.domain.models.TrainingUiState
 import com.alonso.testapp.presentation.TrainingTab
 import com.alonso.testapp.presentation.TrainingViewModel
-import org.koin.androidx.compose.koinViewModel
+
 
 @Composable
 fun TrainingScreen(
     navController: NavHostController,
-    viewModel: TrainingViewModel = koinViewModel()
+    viewModel: TrainingViewModel
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -126,6 +139,7 @@ private fun TrainingTabs(
         }
     }
 }
+
 @Composable
 private fun TimerTabContent(
     uiState: TrainingUiState,
@@ -139,7 +153,8 @@ private fun TimerTabContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = currentInterval?.title ?: if (uiState.isFinished) "Тренировка завершена" else "Готово к старту",
+            text = currentInterval?.title
+                ?: if (uiState.isFinished) "Тренировка завершена" else "Готово к старту",
             style = MaterialTheme.typography.titleMedium
         )
 

@@ -6,28 +6,47 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.alonso.testapp.domain.models.BottomNavRoutes
+import com.alonso.testapp.presentation.MainViewModel
 import com.alonso.testapp.ui.compose.MainScreen
+
 const val ANIMATION_DELAY = 500
-fun NavGraphBuilder.mainScreenNavigation(navController: NavHostController) {
+fun NavGraphBuilder.mainScreenNavigation(
+    navController: NavHostController,
+    viewModel: MainViewModel
+) {
     composable(
         route = BottomNavRoutes.Main.name,
         enterTransition = {
             if (BottomNavRoutes.isInEnum(initialState.destination.route.toString())) {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(ANIMATION_DELAY))
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    tween(ANIMATION_DELAY)
+                )
             } else {
-                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Up, tween(ANIMATION_DELAY))
+                slideIntoContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Up,
+                    tween(ANIMATION_DELAY)
+                )
             }
         },
         exitTransition = {
             if (BottomNavRoutes.isInEnum(targetState.destination.route.toString())) {
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(ANIMATION_DELAY))
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    tween(ANIMATION_DELAY)
+                )
             } else {
 
-                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Down, tween(ANIMATION_DELAY))
+                slideOutOfContainer(
+                    AnimatedContentTransitionScope.SlideDirection.Down,
+                    tween(ANIMATION_DELAY)
+                )
             }
         }
     ) {
-        MainScreen(navController = navController)
+        MainScreen(
+            navController = navController,
+            viewModel = viewModel
+        )
     }
 }
-

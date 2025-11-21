@@ -4,13 +4,18 @@ import com.alonso.testapp.data.api.ApiService
 import com.alonso.testapp.domain.models.AllTraining
 import com.alonso.testapp.domain.models.TrainingInterval
 import com.alonso.testapp.domain.repo.TrainingRepository
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-class TrainingRepositoryImpl (
+class TrainingRepositoryImpl(
     private val api: ApiService
 ) : TrainingRepository {
-    override var currentTraining: AllTraining? = null
 
-    override suspend fun loadTraining(id: Long): AllTraining {
+    private val _currentTraining = MutableStateFlow<AllTraining?>(null)
+    override val currentTraining: StateFlow<AllTraining?> = _currentTraining.asStateFlow()
+
+    override suspend fun loadTraining(id: Long) {
         val response = api.getIntervalTimer(id)
         val timer = response.timer
 
@@ -29,7 +34,6 @@ class TrainingRepositoryImpl (
             intervals = intervals
         )
 
-        currentTraining = plan
-        return plan
+        _currentTraining.value = plan
     }
 }

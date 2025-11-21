@@ -32,21 +32,22 @@ import androidx.navigation.NavController
 import com.alonso.testapp.R
 import com.alonso.testapp.domain.models.BottomNavRoutes
 import com.alonso.testapp.presentation.MainViewModel
-import org.koin.androidx.compose.koinViewModel
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     navController: NavController,
-    viewModel: MainViewModel = koinViewModel()
+    viewModel: MainViewModel
 ) {
     var idText by remember { mutableStateOf("68") }
 
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(uiState.isLoaded, uiState.trainingId) {
-        if (uiState.isLoaded && uiState.trainingId != null) {
+    LaunchedEffect(uiState.navigateToTraining) {
+        if (uiState.navigateToTraining) {
             navController.navigate(BottomNavRoutes.Trainings.name)
+            viewModel.onNavigateToTrainingConsumed()
         }
     }
 
@@ -77,7 +78,10 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 16.dp, horizontal = 32.dp)
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                vertical = 16.dp,
+                horizontal = 32.dp
+            )
         ) {
             item {
                 OutlinedTextField(

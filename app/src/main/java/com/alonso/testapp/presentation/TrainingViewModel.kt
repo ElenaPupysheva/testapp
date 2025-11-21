@@ -10,6 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class TrainingViewModel(
@@ -23,12 +24,18 @@ class TrainingViewModel(
     private var timerJob: Job? = null
 
     init {
-        val plan = repository.currentTraining
-        if (plan != null) {
-            _uiState.value = TrainingUiState(
-                intervals = plan.intervals,
-                totalDurationSec = plan.totalDurationSec
-            )
+        viewModelScope.launch {
+            repository.currentTraining.collectLatest { plan ->
+                if (plan != null) {
+                    timerJob?.cancel()
+                    _uiState.value = TrainingUiState(
+                        intervals = plan.intervals,
+                        totalDurationSec = plan.totalDurationSec
+                    )
+                } else {
+                    _uiState.value = TrainingUiState()
+                }
+            }
         }
     }
 
