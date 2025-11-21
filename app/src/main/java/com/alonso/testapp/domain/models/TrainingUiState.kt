@@ -11,5 +11,5 @@ data class TrainingUiState(
     val elapsedTotalSec: Int = 0,
     val isRunning: Boolean = false,
     val isFinished: Boolean = false,
-    val selectedTab: TrainingTab = TrainingTab.Timer
+    val selectedTab: TrainingTab = TrainingTab.TIMER
 )

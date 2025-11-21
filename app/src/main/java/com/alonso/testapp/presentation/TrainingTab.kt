@@ -1,3 +1,3 @@
 package com.alonso.testapp.presentation
 
-enum class TrainingTab {Timer, Map }
+enum class TrainingTab {TIMER, MAP }

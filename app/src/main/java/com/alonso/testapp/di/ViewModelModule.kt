@@ -14,6 +14,6 @@ val viewModelModule = module {
         MainViewModel(get())
     }
     viewModel<TrainingViewModel> {
-        TrainingViewModel(get())
+        TrainingViewModel(get(),get())
     }
 }

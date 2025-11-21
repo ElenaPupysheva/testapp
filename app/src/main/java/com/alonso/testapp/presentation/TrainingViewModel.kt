@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alonso.testapp.domain.models.TrainingUiState
 import com.alonso.testapp.domain.repo.TrainingRepository
+import com.alonso.testapp.utils.sound.SoundPlayer
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,7 +12,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class TrainingViewModel(private val repository: TrainingRepository
+class TrainingViewModel(
+    private val repository: TrainingRepository,
+    private val soundPlayer: SoundPlayer
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(TrainingUiState())
@@ -49,6 +52,7 @@ class TrainingViewModel(private val repository: TrainingRepository
             isFinished = false,
             currentIntervalIndex = newIndex
         )
+        soundPlayer.beep()
 
         timerJob?.cancel()
         timerJob = viewModelScope.launch {
@@ -79,12 +83,18 @@ class TrainingViewModel(private val repository: TrainingRepository
                     isRunning = false,
                     isFinished = true
                 )
+                viewModelScope.launch {
+                    soundPlayer.beep()
+                    delay(200L)
+                    soundPlayer.beep()
+                }
             } else {
                 _uiState.value = state.copy(
                     currentIntervalIndex = currentIndex + 1,
                     elapsedInCurrentSec = 0,
                     elapsedTotalSec = newElapsedTotal
                 )
+                soundPlayer.beep()
             }
         } else {
             _uiState.value = state.copy(
