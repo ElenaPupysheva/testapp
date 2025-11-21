@@ -1,7 +1,12 @@
 package com.alonso.testapp.domain
 
-class StartTrainingUseCase {
-    suspend operator fun invoke(id: Long) {
-        // TODO: вызвать репозиторий / API и загрузить тренировку
+import com.alonso.testapp.domain.models.AllTraining
+import com.alonso.testapp.domain.repo.TrainingRepository
+
+class StartTrainingUseCase(
+    private val repository: TrainingRepository
+) {
+    suspend operator fun invoke(id: Long): AllTraining {
+        return repository.loadTraining(id)
     }
 }

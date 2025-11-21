@@ -8,12 +8,12 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    single { StartTrainingUseCase() }
+    single { StartTrainingUseCase(get()) }
 
     viewModel<MainViewModel>{
         MainViewModel(get())
     }
     viewModel<TrainingViewModel> {
-        TrainingViewModel()
+        TrainingViewModel(get())
     }
 }
