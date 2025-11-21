@@ -1,4 +1,6 @@
 package com.alonso.testapp.presentation
 
-class TrainingViewModel {
+import androidx.lifecycle.ViewModel
+
+class TrainingViewModel: ViewModel() {
 }

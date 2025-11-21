@@ -16,6 +16,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,15 +28,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.alonso.testapp.R
+import com.alonso.testapp.domain.models.BottomNavRoutes
+import com.alonso.testapp.presentation.MainViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun StartScreen(
-    isLoading: Boolean,
-    onLoadClick: (Long) -> Unit
+fun MainScreen(
+    navController: NavController,
+    viewModel: MainViewModel = koinViewModel()
 ) {
     var idText by remember { mutableStateOf("68") }
+
+    val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(uiState.isLoaded, uiState.trainingId) {
+        if (uiState.isLoaded && uiState.trainingId != null) {
+            navController.navigate(BottomNavRoutes.Trainings.name)
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -62,7 +77,7 @@ fun StartScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 16.dp)
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(vertical = 16.dp, horizontal = 32.dp)
         ) {
             item {
                 OutlinedTextField(
@@ -82,21 +97,19 @@ fun StartScreen(
                     onClick = {
                         val id = idText.toLongOrNull()
                         if (id != null) {
-                            onLoadClick(id)
+                            viewModel.loadTraining(id)
                         }
                     },
-                    enabled = !isLoading,
+                    enabled = !uiState.isLoading,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Загрузить")
                 }
 
-                if (isLoading) {
+                if (uiState.isLoading) {
                     Spacer(Modifier.height(16.dp))
                     CircularProgressIndicator()
                 }
-
-
             }
         }
     }
